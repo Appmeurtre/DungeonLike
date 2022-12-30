@@ -7,33 +7,25 @@ namespace DungeonLike
     {
         static void Main(string[] args)
         {
-            // Create a new player character
             Player player = new Player();
 
-            // Set the player's starting position
             player.X = 1;
             player.Y = 1;
 
-            // Create a new list of enemies
             List<Enemy> enemies = new List<Enemy>();
 
-            // Add some enemies to the list
             enemies.Add(new Enemy { X = 5, Y = 5 });
             enemies.Add(new Enemy { X = 10, Y = 10 });
 
-            // Main game loop
             while (true)
             {
-                // Clear the console
+
                 Console.Clear();
 
-                // Draw the map
                 DrawMap(player, enemies);
 
-                // Get the player's input
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 
-                // Move the player based on the input
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
@@ -50,12 +42,10 @@ namespace DungeonLike
                         break;
                 }
 
-                // Check if the player has collided with any enemies
                 foreach (Enemy enemy in enemies)
                 {
                     if (player.X == enemy.X && player.Y == enemy.Y)
                     {
-                        // The player and enemy have collided, end the game
                         Console.Clear();
                         Console.WriteLine("You have been defeated by the enemy!");
                         return;
@@ -72,19 +62,16 @@ namespace DungeonLike
                 {
                     if (player.X == x && player.Y == y)
                     {
-                        // Draw the player character
                         Console.Write("P");
                     }
                     else
                     {
                         bool enemyDrawn = false;
 
-                        // Check if any enemies are at this position
                         foreach (Enemy enemy in enemies)
                         {
                             if (enemy.X == x && enemy.Y == y)
                             {
-                                // Draw the enemy character
                                 Console.Write("E");
                                 enemyDrawn = true;
                                 break;
@@ -93,8 +80,7 @@ namespace DungeonLike
 
                         if (!enemyDrawn)
                         {
-                            // Draw an empty space
-                            Console.Write(" ");
+                            Console.Write(".");
                         }
                     }
                 }
