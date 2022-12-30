@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RogueLikeGame
+namespace DungeonLike
 {
     class Program
     {
