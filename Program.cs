@@ -1,61 +1,118 @@
-using Internal;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using static System.Console;
-using static System.Math;
-using static System.Convert;
-using static System.ConsoleColor;
-using static System.ConsoleKey;
-using static System.ConsoleKeyInfo;
-using static System.ConsoleModifiers;
-using static System.Environment;
-using static System.Environment.SpecialFolder;
-using static System.EnvironmentVariableTarget;
-using static System.Globalization.CultureInfo;
-using static System.Globalization.DateTimeStyles;
-using static System.Globalization.NumberStyles;
-using static System.Globalization.NumberFormatInfo;
 
-
-namespace DungeonLike
+namespace RogueLikeGame
 {
-    public class Program
+    class Program
     {
-        static void main(string[] args)
+        static void Main(string[] args)
         {
-            int Char_health_Current = 100;
-            int Char_health_Max = 100;
-            int score = 0;
-            int Gameover = 0;
-            public Random SpawnPointGenerator = new Random();
+            // Create a new player character
+            Player player = new Player();
 
-            string[,] Draw_Game_Map = new string[239, 77]; 
-            string Draw_Character = "X";
+            // Set the player's starting position
+            player.X = 1;
+            player.Y = 1;
 
-            do {
-                int SpawnPointX = Random.Next(0, 230);
-                int SpawnPointY = Random.Next(0, 77);
-                int SpawnPointHeight = Random.Next(5, 8);
-                int SpawnPointWidth = Random.Next(7, 10);
+            // Create a new list of enemies
+            List<Enemy> enemies = new List<Enemy>();
 
-                for(int y = 0; y =< SpawnPointHeight; y++)
+            // Add some enemies to the list
+            enemies.Add(new Enemy { X = 5, Y = 5 });
+            enemies.Add(new Enemy { X = 10, Y = 10 });
+
+            // Main game loop
+            while (true)
+            {
+                // Clear the console
+                Console.Clear();
+
+                // Draw the map
+                DrawMap(player, enemies);
+
+                // Get the player's input
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+
+                // Move the player based on the input
+                switch (keyInfo.Key)
                 {
-                    for(int x = 0; x =< SpawnPointWidth; x++)
+                    case ConsoleKey.UpArrow:
+                        player.Y--;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        player.Y++;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        player.X--;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        player.X++;
+                        break;
+                }
+
+                // Check if the player has collided with any enemies
+                foreach (Enemy enemy in enemies)
+                {
+                    if (player.X == enemy.X && player.Y == enemy.Y)
                     {
-                        if(y == 0 || y == SpawnPointHeight-1)
+                        // The player and enemy have collided, end the game
+                        Console.Clear();
+                        Console.WriteLine("You have been defeated by the enemy!");
+                        return;
+                    }
+                }
+            }
+        }
+
+        static void DrawMap(Player player, List<Enemy> enemies)
+        {
+            for (int y = 0; y < 20; y++)
+            {
+                for (int x = 0; x < 20; x++)
+                {
+                    if (player.X == x && player.Y == y)
+                    {
+                        // Draw the player character
+                        Console.Write("P");
+                    }
+                    else
+                    {
+                        bool enemyDrawn = false;
+
+                        // Check if any enemies are at this position
+                        foreach (Enemy enemy in enemies)
                         {
-                            
+                            if (enemy.X == x && enemy.Y == y)
+                            {
+                                // Draw the enemy character
+                                Console.Write("E");
+                                enemyDrawn = true;
+                                break;
+                            }
                         }
-                        else 
+
+                        if (!enemyDrawn)
                         {
-                            
+                            // Draw an empty space
+                            Console.Write(" ");
                         }
                     }
                 }
-            } while (Gameover == 0);
-            
+
+                Console.WriteLine();
+            }
         }
+    }
+
+    class Player
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+    }
+
+    class Enemy
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }
